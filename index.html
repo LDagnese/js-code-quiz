@@ -11,13 +11,20 @@
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
-<body>
-    <header class="header">
+<body class="bg-light">
+    <header class="px-3 py-2 text-bg-dark">
         <h1>JavaScript Coding Quiz</h1>
     </header>
-    <div class="countdown"><h3 id="timer"></h3></div>
-    <div class="questions">
-
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+            <button type="button" class="btn btn-dark" id="start">Start!</button>
+            <h3 id="timer"></h3>
+        </div>
+        </div>
+        
+        <div class="questions">
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

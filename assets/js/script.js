@@ -1,5 +1,6 @@
 let seconds = 5;
 const timerEl = document.getElementById("timer");
+const startBtn = document.getElementById("start");
 
 // declare the questions array
 
@@ -44,4 +45,6 @@ function timerHandler() {
 // StartButton
 // View HighScore Button
 
-timerHandler();
+startBtn.addEventListener("click", () => {
+  timerHandler();
+});
