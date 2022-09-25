@@ -1,12 +1,16 @@
 # js-code-quiz
 
-*User Story*
+## Description
+Module 4 Challenge  
+A Javascript app that asks Javascript questions with a timer.  
+
+## User Story
 
 AS A coding boot camp student  
 I WANT to take a timed quiz on JavaScript fundamentals that stores high scores  
 SO THAT I can gauge my progress compared to my peers  
 
-*Acceptance Criteria*
+## Acceptance Criteria
 GIVEN I am taking a code quiz  
 WHEN I click the start button  
 THEN a timer starts and I am presented with a question  
