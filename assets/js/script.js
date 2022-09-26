@@ -2,6 +2,7 @@ let seconds = 5;
 const timerEl = document.getElementById("timer");
 const startBtn = document.getElementById("start");
 const questionsEl = document.getElementById("questions");
+const questionFormEl = document.getElementById("question-form");
 
 const questionsArr = [
   {
@@ -14,10 +15,12 @@ const questionsArr = [
 ];
 
 function displayQuestion(question) {
-  const questionFormEl = document.createElement("form");
   const questionText = document.createElement("p");
-  const questionSubmitBtn = document.createElement("button");
-  questionFormEl.classList.add("form-check");
+  const questionSubmitBtn = document.createElement("input");
+
+  // Set the answer as a data attriburte
+  questionText.setAttribute("data-answer", question.answer);
+  questionText.setAttribute("id", "question");
 
   // Set the question
   questionText.textContent = question.text;
@@ -32,7 +35,7 @@ function displayQuestion(question) {
     choiceWrapper.classList.add("form-check");
 
     choiceInput.classList.add("form-check-input");
-    choiceInput.setAttribute('name','question');
+    choiceInput.setAttribute("name", "question");
     choiceInput.setAttribute("type", "radio");
     choiceInput.setAttribute("id", index);
 
@@ -46,13 +49,44 @@ function displayQuestion(question) {
   });
 
   // Build the button
-  questionSubmitBtn.textContent = "Submit";
+  questionSubmitBtn.setAttribute("type", "submit");
+  questionSubmitBtn.setAttribute("value", "Submit");
   questionSubmitBtn.classList.add("btn");
   questionSubmitBtn.classList.add("btn-dark");
 
   questionFormEl.append(questionSubmitBtn);
-
   questionsEl.append(questionFormEl);
+}
+
+// Function for handling submitted answer
+function handleSubmit(event) {
+  event.preventDefault();
+
+  const correctAnswer = document.getElementById("question").dataset.answer;
+  let response;
+
+  // Get selected answer
+
+  if (document.getElementById("0").checked) {
+    response = 0;
+  } else if (document.getElementById("1").checked) {
+    response = 1;
+  } else if (document.getElementById("2").checked) {
+    response = 2;
+  } else if (document.getElementById("3").checked) {
+    response = 3;
+  } else {
+    console.log("nothing selected");
+    return;
+  }
+
+  questionFormEl.innerHTML = "";
+
+  if (correctAnswer == response) {
+    console.log("You selected the CORRECT answer!");
+  } else {
+    console.log("you selected the WRONG answer!");
+  }
 }
 
 // handler for showing the questions on the page
@@ -94,3 +128,4 @@ displayQuestion(questionsArr[0]);
 startBtn.addEventListener("click", () => {
   timerHandler();
 });
+questionFormEl.addEventListener("submit", handleSubmit);
