@@ -1,6 +1,7 @@
-let seconds = 10;
+let gameLength = 10;
+let timer = gameLength;
 let questionCounter;
-let score;
+let score = 0;
 const timerEl = document.getElementById("timer");
 const startBtn = document.getElementById("start");
 const questionsEl = document.getElementById("questions");
@@ -24,7 +25,7 @@ const questionsArr = [
 let tempQuestionsArr = [];
 
 function displayQuestion() {
-  if (tempQuestionsArr.length) {
+  if (tempQuestionsArr.length && timer) {
     // get a random index from tempQuestionArr
     let index = Math.floor(Math.random() * tempQuestionsArr.length);
 
@@ -73,6 +74,9 @@ function displayQuestion() {
 
     questionFormEl.append(questionSubmitBtn);
     questionsEl.append(questionFormEl);
+  } else {
+    score = score + timer;
+    timer = 0;
   }
 }
 
@@ -101,41 +105,47 @@ function handleSubmit(event) {
   questionFormEl.innerHTML = "";
 
   if (correctAnswer == response) {
-    displayQuestion();
     score = score + 10;
-  } else {
     displayQuestion();
-    seconds = seconds - 10;
+  } else {
+    timer = timer - 10;
+    displayQuestion();
   }
 }
 
 // starts the timer on the page
 function timerHandler() {
-  const timer = setTimeout(function () {
-    if (seconds > 1) {
-      timerEl.textContent = `${seconds} seconds remaining`;
-      seconds--;
+  const time = setTimeout(function () {
+    if (timer > 1) {
+      timerEl.textContent = `${timer} seconds remaining`;
+      timer--;
       timerHandler();
-    } else if (seconds === 1) {
-      timerEl.textContent = `${seconds} second remaining`;
-      seconds--;
+    } else if (timer === 1) {
+      timerEl.textContent = `${timer} second remaining`;
+      timer--;
       timerHandler();
     } else {
       timerEl.textContent = "Game Over";
       startBtn.textContent = "Go Again!";
-      clearInterval(timerHandler);
       questionFormEl.innerHTML = "";
-      seconds = 10;
+      endQuiz();
     }
   }, 1000);
 }
 
 function startQuiz() {
+  score = 0;
   tempQuestionsArr = questionsArr.slice(0);
   displayQuestion();
   timerHandler();
 }
 
+function endQuiz() {
+  timer = gameLength;
+  alert(`You scored ${score} points!`)
+
+  questionsEl.appendChild(scoreEl);
+}
 //  handler to display the getHighScore when button clicked
 // if highScore doesn't exist instantiate new array of objects
 // sort the highScore Array from localStorage
