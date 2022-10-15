@@ -1,4 +1,4 @@
-let seconds = 5;
+let seconds = 10;
 let questionCounter;
 let score;
 const timerEl = document.getElementById("timer");
@@ -13,50 +13,67 @@ const questionsArr = [
     choices: ["Comma", "Colon", "Semicolon", "None of the above"],
     answer: 2,
   },
+  {
+    id: 2,
+    text: "What is the proper way to declare a variable?",
+    choices: ["var", "const", "def", "None of the above"],
+    answer: 1,
+  },
 ];
 
-function displayQuestion(question) {
-  const questionText = document.createElement("p");
-  const questionSubmitBtn = document.createElement("input");
+let tempQuestionsArr = [];
 
-  // Set the answer as a data attriburte
-  questionText.setAttribute("data-answer", question.answer);
-  questionText.setAttribute("id", "question");
+function displayQuestion() {
+  if (tempQuestionsArr.length) {
+    // get a random index from tempQuestionArr
+    let index = Math.floor(Math.random() * tempQuestionsArr.length);
 
-  // Set the question
-  questionText.textContent = question.text;
-  questionFormEl.append(questionText);
+    // remove the question from the temp array
+    let removedQuestionArr = tempQuestionsArr.splice(index, 1);
+    question = removedQuestionArr[0];
 
-  // Add the answers
-  question.choices.forEach((choice, index) => {
-    const choiceWrapper = document.createElement("div");
-    const choiceInput = document.createElement("input");
-    const choiceLabel = document.createElement("label");
+    const questionText = document.createElement("p");
+    const questionSubmitBtn = document.createElement("input");
 
-    choiceWrapper.classList.add("form-check");
+    // Set the answer as a data attriburte
+    questionText.setAttribute("data-answer", question.answer);
+    questionText.setAttribute("id", "question");
 
-    choiceInput.classList.add("form-check-input");
-    choiceInput.setAttribute("name", "question");
-    choiceInput.setAttribute("type", "radio");
-    choiceInput.setAttribute("id", index);
+    // Set the question
+    questionText.textContent = question.text;
+    questionFormEl.append(questionText);
 
-    choiceLabel.classList.add("form-check-label");
-    choiceLabel.setAttribute("for", index);
-    choiceLabel.textContent = choice;
+    // Add the answers
+    question.choices.forEach((choice, index) => {
+      const choiceWrapper = document.createElement("div");
+      const choiceInput = document.createElement("input");
+      const choiceLabel = document.createElement("label");
 
-    choiceWrapper.append(choiceInput, choiceLabel);
+      choiceWrapper.classList.add("form-check");
 
-    questionFormEl.append(choiceWrapper);
-  });
+      choiceInput.classList.add("form-check-input");
+      choiceInput.setAttribute("name", "question");
+      choiceInput.setAttribute("type", "radio");
+      choiceInput.setAttribute("id", index);
 
-  // Build the button
-  questionSubmitBtn.setAttribute("type", "submit");
-  questionSubmitBtn.setAttribute("value", "Submit");
-  questionSubmitBtn.classList.add("btn");
-  questionSubmitBtn.classList.add("btn-dark");
+      choiceLabel.classList.add("form-check-label");
+      choiceLabel.setAttribute("for", index);
+      choiceLabel.textContent = choice;
 
-  questionFormEl.append(questionSubmitBtn);
-  questionsEl.append(questionFormEl);
+      choiceWrapper.append(choiceInput, choiceLabel);
+
+      questionFormEl.append(choiceWrapper);
+    });
+
+    // Build the button
+    questionSubmitBtn.setAttribute("type", "submit");
+    questionSubmitBtn.setAttribute("value", "Submit");
+    questionSubmitBtn.classList.add("btn");
+    questionSubmitBtn.classList.add("btn-dark");
+
+    questionFormEl.append(questionSubmitBtn);
+    questionsEl.append(questionFormEl);
+  }
 }
 
 // Function for handling submitted answer
@@ -84,20 +101,13 @@ function handleSubmit(event) {
   questionFormEl.innerHTML = "";
 
   if (correctAnswer == response) {
-    console.log("You selected the CORRECT answer!");
+    displayQuestion();
     score = score + 10;
   } else {
-    console.log("You selected the WRONG answer!");
+    displayQuestion();
     seconds = seconds - 10;
   }
 }
-
-// handler for showing the questions on the page
-// Needs to get the question from the main function
-// builds the html and put an event listener on the buttons
-
-// handler for displaying the score on the page
-// updates when a question is answered
 
 // starts the timer on the page
 function timerHandler() {
@@ -114,13 +124,15 @@ function timerHandler() {
       timerEl.textContent = "Game Over";
       startBtn.textContent = "Go Again!";
       clearInterval(timerHandler);
-      seconds = 5;
+      questionFormEl.innerHTML = "";
+      seconds = 10;
     }
   }, 1000);
 }
 
 function startQuiz() {
-  displayQuestion(questionsArr[Math.floor(Math.random() * questionsArr.length)]);
+  tempQuestionsArr = questionsArr.slice(0);
+  displayQuestion();
   timerHandler();
 }
 
