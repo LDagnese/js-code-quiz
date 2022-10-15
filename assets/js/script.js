@@ -2,7 +2,6 @@ let gameLength = 30;
 let timer = gameLength;
 let questionCounter;
 let score = 0;
-const highScoreArr = [];
 const timerEl = document.getElementById("timer");
 const startBtn = document.getElementById("start");
 const questionsEl = document.getElementById("questions");
@@ -150,11 +149,23 @@ function endQuiz() {
     score: score,
   };
 
-  saveScore(highScore)
+  saveScore(highScore);
 }
 
 function saveScore(highScore) {
-  localStorage.setItem("highScore", JSON.stringify(highScore));
+  let tempScoreArr = JSON.parse(localStorage.getItem("highScore"));
+
+  if (!tempScoreArr) {
+    tempScoreArr = [];
+  }
+
+  tempScoreArr.push(highScore);
+
+  localStorage.setItem("highScore", JSON.stringify(tempScoreArr));
+}
+
+function loadScores() {
+  highScoreArr = JSON.parse(localStorage.getItem("highScore"));
 }
 
 startBtn.addEventListener("click", startQuiz);
