@@ -119,6 +119,11 @@ function timerHandler() {
   }, 1000);
 }
 
+function startQuiz() {
+  displayQuestion(questionsArr[Math.floor(Math.random() * questionsArr.length)]);
+  timerHandler();
+}
+
 //  handler to display the getHighScore when button clicked
 // if highScore doesn't exist instantiate new array of objects
 // sort the highScore Array from localStorage
@@ -129,7 +134,5 @@ function timerHandler() {
 
 // View HighScore Button
 
-displayQuestion(questionsArr[Math.floor(Math.random() * questionsArr.length)]);
-
-startBtn.addEventListener("click", timerHandler);
+startBtn.addEventListener("click", startQuiz);
 questionFormEl.addEventListener("submit", handleSubmit);
