@@ -1,4 +1,6 @@
 let seconds = 5;
+let questionCounter;
+let score;
 const timerEl = document.getElementById("timer");
 const startBtn = document.getElementById("start");
 const questionsEl = document.getElementById("questions");
@@ -10,7 +12,6 @@ const questionsArr = [
     text: "Usually JavaScript line(s) end with a what?",
     choices: ["Comma", "Colon", "Semicolon", "None of the above"],
     answer: 2,
-    points: 10,
   },
 ];
 
@@ -76,7 +77,7 @@ function handleSubmit(event) {
   } else if (document.getElementById("3").checked) {
     response = 3;
   } else {
-    console.log("nothing selected");
+    alert("You must select an answer!");
     return;
   }
 
@@ -84,8 +85,10 @@ function handleSubmit(event) {
 
   if (correctAnswer == response) {
     console.log("You selected the CORRECT answer!");
+    score = score + 10;
   } else {
-    console.log("you selected the WRONG answer!");
+    console.log("You selected the WRONG answer!");
+    seconds = seconds - 10;
   }
 }
 
@@ -98,17 +101,20 @@ function handleSubmit(event) {
 
 // starts the timer on the page
 function timerHandler() {
-  const timer = setInterval(function () {
+  const timer = setTimeout(function () {
     if (seconds > 1) {
       timerEl.textContent = `${seconds} seconds remaining`;
       seconds--;
+      timerHandler();
     } else if (seconds === 1) {
       timerEl.textContent = `${seconds} second remaining`;
       seconds--;
+      timerHandler();
     } else {
       timerEl.textContent = "Game Over";
       startBtn.textContent = "Go Again!";
       clearInterval(timerHandler);
+      seconds = 5;
     }
   }, 1000);
 }
@@ -123,9 +129,7 @@ function timerHandler() {
 
 // View HighScore Button
 
-displayQuestion(questionsArr[0]);
+displayQuestion(questionsArr[Math.floor(Math.random() * questionsArr.length)]);
 
-startBtn.addEventListener("click", () => {
-  timerHandler();
-});
+startBtn.addEventListener("click", timerHandler);
 questionFormEl.addEventListener("submit", handleSubmit);
