@@ -1,7 +1,8 @@
-let gameLength = 10;
+let gameLength = 30;
 let timer = gameLength;
 let questionCounter;
 let score = 0;
+const highScoreArr = [];
 const timerEl = document.getElementById("timer");
 const startBtn = document.getElementById("start");
 const questionsEl = document.getElementById("questions");
@@ -108,7 +109,7 @@ function handleSubmit(event) {
     score = score + 10;
     displayQuestion();
   } else {
-    timer = timer - 10;
+    timer = timer - 5;
     displayQuestion();
   }
 }
@@ -142,19 +143,19 @@ function startQuiz() {
 
 function endQuiz() {
   timer = gameLength;
-  alert(`You scored ${score} points!`)
+  alert(`You scored ${score} points!`);
+  let initial = prompt("Please Enter your initials");
+  const highScore = {
+    initials: initial,
+    score: score,
+  };
 
-  questionsEl.appendChild(scoreEl);
+  saveScore(highScore)
 }
-//  handler to display the getHighScore when button clicked
-// if highScore doesn't exist instantiate new array of objects
-// sort the highScore Array from localStorage
 
-//  handler for storing the highScore to localStorage
-// if highScore doesn't exist in localStorage instantiate a new array
-// (possible function to handle this outside the function)?
-
-// View HighScore Button
+function saveScore(highScore) {
+  localStorage.setItem("highScore", JSON.stringify(highScore));
+}
 
 startBtn.addEventListener("click", startQuiz);
 questionFormEl.addEventListener("submit", handleSubmit);
